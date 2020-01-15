@@ -16,9 +16,9 @@ detector:
       hough_min_line_length: 3
       hough_max_line_gap:    1
 
-      hsv_white1:  [0,0,150]
-      hsv_white2:  [180,100,255]
-      hsv_yellow1: [25,140,100]
+      hsv_white1:  [0,0,82]
+      hsv_white2:  [78,24,255]
+      hsv_yellow1: [28,21,140]
       hsv_yellow2: [45,255,255]
       hsv_red1:    [0,140,100]
       hsv_red2:    [15,255,255]
@@ -34,11 +34,11 @@ detector_intersection:
      hough_min_line_length: 3
      hough_max_line_gap:    1
 
-     hsv_white1:  [0,0,150]
-     hsv_white2:  [180,100,255]
-     hsv_yellow1: [25,140,100]
-     hsv_yellow2: [45,255,255]
-     hsv_red1:    [0,50,100]
-     hsv_red2:    [15,255,255]
-     hsv_red3:    [165,50,100]
-     hsv_red4:    [180,255,255]
+     hsv_white1:  [0,0,82]
+      hsv_white2:  [78,24,255]
+      hsv_yellow1: [28,21,140]
+      hsv_yellow2: [45,255,255]
+      hsv_red1:    [0,140,100]
+      hsv_red2:    [15,255,255]
+      hsv_red3:    [165,140,100]
+      hsv_red4:    [180,255,255]
