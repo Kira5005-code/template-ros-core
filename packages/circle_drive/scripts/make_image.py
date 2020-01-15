@@ -48,7 +48,7 @@ if __name__ == '__main__':
 	main(sys.argv)
 	print("Hello world")
     # create the node
-    node = MyNode(node_name='circle_drive_node')
+    node = MyNode(node_name='image_save')
     # run node
     node.run()
     # keep spinning
