@@ -13,10 +13,10 @@ detector:
       dilation_kernel_size: 3
       canny_thresholds: [80,200]
       hough_threshold: 2
-      hough_min_line_length: 3
+      hough_min_line_length: 2
       hough_max_line_gap:    1
 
-      hsv_white1:  [48,0,0]
+      hsv_white1:  [48,21,255]
       hsv_white2:  [65,21,255]
       hsv_yellow1: [14,0,86]
       hsv_yellow2: [205,164,255]
@@ -31,10 +31,10 @@ detector_intersection:
      dilation_kernel_size: 3
      canny_thresholds: [80,200]
      hough_threshold: 2
-     hough_min_line_length: 3
+     hough_min_line_length: 2
      hough_max_line_gap:    1
 
-      hsv_white1:  [48,0,0]
+      hsv_white1:  [48,21,255]
       hsv_white2:  [65,21,255]
       hsv_yellow1: [14,0,86]
       hsv_yellow2: [205,164,255]
