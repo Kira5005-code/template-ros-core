@@ -18,8 +18,8 @@ detector:
 
       hsv_white1:  [60, 0, 60]
       hsv_white2:  [255,110,255]
-      hsv_yellow1: [10,13,104]
-      hsv_yellow2: [35,255,245]
+      hsv_yellow1: [20,20,104]
+      hsv_yellow2: [40,255,245]
       hsv_red1:    [0,140,100]
       hsv_red2:    [15,255,255]
       hsv_red3:    [165,140,100]
@@ -36,8 +36,8 @@ detector_intersection:
 
      hsv_white1:  [60, 0, 60]
      hsv_white2:  [255,110,255]
-     hsv_yellow1: [10,13,104]
-     hsv_yellow2: [35,255,245]
+     hsv_yellow1: [20,20,104]
+     hsv_yellow2: [40,255,245]
      hsv_red1:    [0,140,100]
      hsv_red2:    [15,255,255]
      hsv_red3:    [165,140,100]
