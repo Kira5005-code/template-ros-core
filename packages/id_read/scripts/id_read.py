@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 import rospy
 
-from duckietown_msgs.msg import AprilTagsWithInfos
+from duckietown_msgs.msg import AprilTagsWithInfos, TagInfo, AprilTagDetection
+from apriltags2_ros.msg import AprilTagDetectionArray
 from std_msgs.msg import String
 
 pub = rospy.Publisher("/topic_readed_id", AprilTagsWithInfos, queue_size = 10)
@@ -10,6 +11,8 @@ def handle_msg(msg):
 	for i in range(10):
 		print("ID DETECTED!!!!!!")
     	pub.publish(msg)
+	for i in range(msg.detections):
+		print(i)
 
 if __name__ == '__main__':
   rospy.init_node('id_reader')
