@@ -1,7 +1,0 @@
-<launch>
-	<arg name="veh" default="$(env VEHICLE_NAME)"/>
-	<group ns="$(arg veh)">
-		<remap from="circle_drive/car_cmd" to="joy_mapper_node/car_cmd"/>
-		<node name="make_image" pkg="circle_drive" type="make_image.py" output="screen" required="true"/>
-	</group>
-</launch>
