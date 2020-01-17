@@ -82,7 +82,8 @@ class RandomAprilTagTurnsNode(object):
                     # 0 - go to left; 1 - straight; 2 - right.
                     for i in range(5):
                         print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
-                        print("FOUNDED ID'S :: " + str(tag_msgs.detections.id))
+                        for j in range(len(tag_msgs.detections)):
+                            print("FOUNDED ID'S :: " + str(tag_msgs.detections[j]))
                     chosenTurn = 2 #denis(id1, id2) #TODO
 
                     self.turn_type = chosenTurn
