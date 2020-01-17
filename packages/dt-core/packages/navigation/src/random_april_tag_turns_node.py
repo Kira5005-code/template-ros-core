@@ -78,6 +78,7 @@ class RandomAprilTagTurnsNode(object):
                 if(len(availableTurns)>0):
                     randomIndex = numpy.random.randint(len(availableTurns))
 					denis_turn_type = tag_msgs.detections[idx_min]
+
 					# 0 - go to left; 1 - straight; 2 - right.
 					for i in range(5):
 						print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
