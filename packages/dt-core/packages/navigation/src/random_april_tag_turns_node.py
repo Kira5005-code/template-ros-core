@@ -77,7 +77,7 @@ class RandomAprilTagTurnsNode(object):
                     #now randomly choose a possible direction
                 if(len(availableTurns)>0):
                     randomIndex = numpy.random.randint(len(availableTurns))
-                    chosenTurn = availableTurns[randomIndex]
+                    chosenTurn = 1
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
 
