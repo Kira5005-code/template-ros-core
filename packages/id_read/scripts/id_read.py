@@ -4,7 +4,7 @@ import rospy
 from duckietown_msgs.msg import AprilTagsWithInfos
 from std_msgs.msg import String
 
-pub = rospy.Publisher("/topic_readed_id", String, queue_size = 10)
+pub = rospy.Publisher("/topic_readed_id", AprilTagsWithInfos, queue_size = 10)
 
 def handle_msg(msg):
 	for i in range(10):
