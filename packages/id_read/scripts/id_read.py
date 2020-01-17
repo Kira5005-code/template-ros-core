@@ -12,7 +12,7 @@ def handle_msg(msg):
 		print("ID DETECTED!!!!!!")
     	#pub.publish(msg)
 	for i in msg.detections:
-		pub.publish(i.id)
+		#pub.publish(i.id) 
 		for j in range(5):
 			print("ID DETECTED :: :: " + str(i.id))
 if __name__ == '__main__':
