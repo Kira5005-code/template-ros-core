@@ -83,6 +83,7 @@ class RandomAprilTagTurnsNode(object):
 						print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
 						print("FOUNDED ID'S :: "tag_msgs.detections)
                     chosenTurn = 2 #denis(id1, id2) #TODO
+
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
 
