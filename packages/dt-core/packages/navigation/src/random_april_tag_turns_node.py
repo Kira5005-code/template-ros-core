@@ -50,15 +50,17 @@ class RandomAprilTagTurnsNode(object):
             # filter out the nearest apriltag
             dis_min = 999
             idx_min = -1
+            indexes_array = []
             for idx, taginfo in enumerate(tag_msgs.infos):
+                indexed_array.append(idx)
                 if(taginfo.tag_type == taginfo.SIGN):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
                     distance = math.sqrt(pos.x**2 + pos.y**2 + pos.z**2)
-                    if distance < dis_min:
+                    if distance < dis_min and idx >= 9 and idx <= 11:
                         dis_min = distance
                         idx_min = idx
-
+            print("IDNEXED FROM LOOP :: " + str(indexes_array))
             if idx_min != -1:
                 taginfo = (tag_msgs.infos)[idx_min]
 
@@ -83,7 +85,9 @@ class RandomAprilTagTurnsNode(object):
                     for i in range(5):
                         print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
                         for j in range(len(tag_msgs.detections)):
-                            print("FOUNDED ID'S :: " + str(tag_msgs.detections[j]))
+                            print("FOUNDED ID'S :: " + str(tag_msgs.detections[j].id))
+                        print("DETECTIONS RANGE" + str(range(len(tag_msgs.detections))))
+                        print("tag msgs detections keys :: " + tag_msgs.__dict__.keys())
                     chosenTurn = 2 #denis(id1, id2) #TODO
 
                     self.turn_type = chosenTurn
