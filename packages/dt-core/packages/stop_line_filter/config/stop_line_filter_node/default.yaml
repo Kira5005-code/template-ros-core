@@ -2,4 +2,4 @@
 stop_distance: 0.1
 min_segs: 4
 off_time: 2
-max_y: 1.2
+max_y: 0.1
