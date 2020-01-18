@@ -77,6 +77,18 @@ class RandomAprilTagTurnsNode(object):
                     #now randomly choose a possible direction
                 if(len(availableTurns)>0):
                     randomIndex = numpy.random.randint(len(availableTurns))
+
+                    ids = []
+                    for i in tag_msgs.detections:
+                        ids.append(i.id)
+
+                    denis_turn_type = tag_msgs.detections[idx_min].id
+
+                    for i in range(10):
+                        print("FOUNDED IDS :::: ")
+                        print(ids)
+                        print("chosend id::" + str(denis_turn_type) )
+
                     chosenTurn = 1
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
