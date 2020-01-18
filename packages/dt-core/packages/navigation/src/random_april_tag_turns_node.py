@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from typing import List, Any
 
 import rospy
 import numpy
@@ -43,6 +44,7 @@ class RandomAprilTagTurnsNode(object):
             self.turn_type = -1
             self.pub_turn_type.publish(self.turn_type)
             #rospy.loginfo("Turn type now: %i" %(self.turn_type))
+
     def cbTag(self, tag_msgs):
         if self.fsm_mode == "INTERSECTION_CONTROL" or self.fsm_mode == "INTERSECTION_COORDINATION" or self.fsm_mode == "INTERSECTION_PLANNING":
             #loop through list of april tags
@@ -50,9 +52,8 @@ class RandomAprilTagTurnsNode(object):
             # filter out the nearest apriltag
             dis_min = 999
             idx_min = -1
-            indexes_array = []
+
             for idx, taginfo in enumerate(tag_msgs.infos):
-                indexed_array.append(idx)
                 if(taginfo.tag_type == taginfo.SIGN):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
@@ -60,7 +61,7 @@ class RandomAprilTagTurnsNode(object):
                     if distance < dis_min and idx >= 9 and idx <= 11:
                         dis_min = distance
                         idx_min = idx
-            print("IDNEXED FROM LOOP :: " + str(indexes_array))
+
             if idx_min != -1:
                 taginfo = (tag_msgs.infos)[idx_min]
 
@@ -82,12 +83,14 @@ class RandomAprilTagTurnsNode(object):
                     denis_turn_type = tag_msgs.detections[idx_min]
 
                     # 0 - go to left; 1 - straight; 2 - right.
-                    for i in range(5):
+                    indexes_array = []  #:
+                    for i in range(len(tag_msgs.detections)):
                         print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
-                        for j in range(len(tag_msgs.detections)):
-                            print("FOUNDED ID'S :: " + str(tag_msgs.detections[j].id))
-                        print("DETECTIONS RANGE" + str(range(len(tag_msgs.detections))))
-                        print("tag msgs detections keys :: " + tag_msgs.__dict__.keys())
+                        indexed_array.append(tag_msgs.detections[j].id)
+
+                    for i in range(5):
+                        print("TAGS ARRAY::::" + str(indexes_array))
+
                     chosenTurn = 2 #denis(id1, id2) #TODO
 
                     self.turn_type = chosenTurn
