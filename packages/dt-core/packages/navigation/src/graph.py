@@ -78,8 +78,8 @@ class VertexPair:
             return False
 
 
-def is_vertex_pair_here(vertex_pairs, checking_vertex_pair: VertexPair):
-    # vertex_pairs : int
+def is_vertex_pair_here(vertex_pairs, checking_vertex_pair):
+    # vertex_pairs : int, checking_vertex_pair : vertex_pair
     for cur_vertex_pair in vertex_pairs:
         if checking_vertex_pair.is_equal(to_compare_with=cur_vertex_pair):
             return True
