@@ -3,11 +3,13 @@ from graphviz import Digraph
 TURN_RIGHT, TURN_LEFT, STRAIGHT = 'TURN_RIGHT', 'TURN_LEFT', 'STRAIGHT'
 
 
-def get_vertex_id_by_qr(vertex_qr_code: int):
+def get_vertex_id_by_qr(vertex_qr_code):
+    # vertex_qr_code : int
     return vertex_qr_code
 
 
-def get_turn_types_by_qr(turns_qr_code: int):
+def get_turn_types_by_qr(turns_qr_code):
+    # turns_qr_code : int
     if turns_qr_code == 9:
         return [STRAIGHT, TURN_RIGHT]
     elif turns_qr_code == 10:
@@ -34,7 +36,8 @@ def get_reversed_turn_type(turn_type):
         return STRAIGHT
 
 
-def insert_to_dict(d: dict, key, value):
+def insert_to_dict(d, key, value):
+    # d : dict
     if key in list(d.keys()):
         if value not in d[key]:
             d[key].append(value)
@@ -44,7 +47,8 @@ def insert_to_dict(d: dict, key, value):
 
 
 class TripleVertex:
-    def __init__(self, v1_id: int, v2_id: int, v3_id: int, turn_type_between):
+    def __init__(self, v1_id, v2_id, v3_id, turn_type_between):
+        # v1_id, v2_id, v3_id : int
         self.v1_id = v1_id
         self.v2_id = v2_id
         self.v3_id = v3_id
@@ -56,7 +60,8 @@ class TripleVertex:
 
 
 class VertexPair:
-    def __init__(self, v1_id: int, v2_id: int, turn_type):
+    def __init__(self, v1_id, v2_id, turn_type):
+        # v1_id, v2_id : int
         self.v1_id = v1_id
         self.v2_id = v2_id
         self.turn_type = turn_type
@@ -73,7 +78,8 @@ class VertexPair:
             return False
 
 
-def is_vertex_pair_here(vertex_pairs: list, checking_vertex_pair: VertexPair):
+def is_vertex_pair_here(vertex_pairs, checking_vertex_pair: VertexPair):
+    # vertex_pairs : int
     for cur_vertex_pair in vertex_pairs:
         if checking_vertex_pair.is_equal(to_compare_with=cur_vertex_pair):
             return True
@@ -90,7 +96,8 @@ class GraphBuilder:
         self.triple_vertexes = list()
         self.dif_vertexes_ids = list()
 
-    def update_state(self, vertex_id: int, last_turn_type):
+    def update_state(self, vertex_id, last_turn_type):
+        # vertext_id : int
         self.pre_last_vertex_id = self.last_vertex_id
         self.last_vertex_id = vertex_id
         self.last_turn_type = last_turn_type
@@ -99,7 +106,8 @@ class GraphBuilder:
         return 'Last vertex id: ' + str(self.last_vertex_id) + '  pre last vertex id: ' + str(
             self.pre_last_vertex_id) + '  last turned type: ' + str(self.last_turn_type)
 
-    def get_optimal_turns(self, prev_last_ver_id: int, last_ver_id: int, turns_qr_code: int):
+    def get_optimal_turns(self, prev_last_ver_id, last_ver_id, turns_qr_code):
+        # all params should be : int
         possible_turns = get_turn_types_by_qr(turns_qr_code=turns_qr_code)
         old_data = self.triple_vertexes
         for triple_vertexe in old_data:
@@ -116,7 +124,8 @@ class GraphBuilder:
                       get_reversed_turn_type(triple_vertexe.turn_type_between))
         return possible_turns
 
-    def add_triple_vertex(self, v1_id: int, v2_id: int, v3_id: int, turn_type):
+    def add_triple_vertex(self, v1_id, v2_id, v3_id, turn_type):
+        # v1_id, v2_id, v3_id : int
         old_data = self.triple_vertexes
         old_data.append(TripleVertex(v1_id=v1_id, v2_id=v2_id, v3_id=v3_id, turn_type_between=turn_type))
 
@@ -143,7 +152,8 @@ class GraphBuilder:
             summary += len(arr)
         return summary == len(self.dif_vertexes_ids) * 3
 
-    def get_next_turn(self, vertex_qr_code: int, turns_qr_code: int):
+    def get_next_turn(self, vertex_qr_code, turns_qr_code):
+        # all params should be: int
         cur_vertex = get_vertex_id_by_qr(vertex_qr_code=vertex_qr_code)
 
         if self.is_graph_built():

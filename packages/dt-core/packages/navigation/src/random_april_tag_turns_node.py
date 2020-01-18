@@ -85,7 +85,7 @@ class RandomAprilTagTurnsNode(object):
                     for i in tag_msgs.detections:
                         ids.append(i.id)
 
-                    denis_turn_type = tag_msgs.detections[idx_min].id
+                    denis_turn_type = int(tag_msgs.detections[idx_min].id)
 
                     for i in range(5):
                         print("DTP :::: " + str(denis_turn_type))
@@ -95,7 +95,7 @@ class RandomAprilTagTurnsNode(object):
                     if gb is None:
                         gb = GraphBuilder()
 
-                    min_id = min(ids)
+                    min_id = int(min(ids))
                     chosenTurn = gb.get_next_turn(vertex_qr_code = min_id, turns_qr_code = denis_turn_type)
 
                     for i in range(5):
