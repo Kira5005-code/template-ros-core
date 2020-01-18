@@ -91,7 +91,7 @@ class GraphBuilder:
         self.dif_vertexes_ids = list()
         self.from_first_vertex_to_another_connections = dict()
         self.vertexes_path_ids = list()
-        self.vertex_path_to_id = None
+        self.vertex_path_to_id = list()
         self.vertexes_path_turns_types = list()
 
     def update_state(self, vertex_id, last_turn_type):
@@ -193,11 +193,15 @@ class GraphBuilder:
     def find_optimal_way_to_undiscovered_vertex(self, vertex_from_id, vertex_to_id):
         self.get_optimal_way_vertexes_ids(vertex_from_id=vertex_from_id, vertex_to_id=vertex_to_id)
         optimal_way_to_undiscovered_vertex_ids = self.vertexes_path_ids
+        have_anything = False
         for i in range(len(optimal_way_to_undiscovered_vertex_ids) - 2):
+            have_anything = True
             self.vertexes_path_turns_types.append(
                 self.get_turn_type_by_path(v1_id=optimal_way_to_undiscovered_vertex_ids[i],
                                            v2_id=optimal_way_to_undiscovered_vertex_ids[i + 1],
                                            v3_id=optimal_way_to_undiscovered_vertex_ids[i + 2]))
+        if not have_anything:
+            print('No turns add to the path for following')
 
     def get_next_step_turn_type(self):
         turn_type_to_return = self.vertexes_path_turns_types[0]
@@ -207,7 +211,6 @@ class GraphBuilder:
     def get_next_turn(self, vertex_qr_code, turns_qr_code):
         #  vertex_qr_code: int, turns_qr_code: int
         cur_vertex = get_vertex_id_by_qr(vertex_qr_code=vertex_qr_code)
-
         if self.is_graph_built():
             self.write_down_triple_vertexes()
             return -1
@@ -242,5 +245,6 @@ class GraphBuilder:
             for vertex_connections_value in self.from_first_vertex_to_another_connections[vertex_connections_key]:
                 self.graph.edge(str(vertex_connections_key), str(vertex_connections_value))
         self.graph.save()
+        self.graph.view()
         self.graph.clear()
         self.graph = Graph('G', filename='graph.gv')
