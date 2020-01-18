@@ -92,7 +92,6 @@ class GraphBuilder:
         self.last_vertex_id = None
         self.last_turn_type = None
         self.pre_last_vertex_id = None
-        self.graph = Digraph('G', filename='hello.gv', engine='sfdp')
         self.triple_vertexes = list()
         self.dif_vertexes_ids = list()
 
