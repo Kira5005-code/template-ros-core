@@ -231,8 +231,8 @@ class GraphBuilder:
                 self.find_optimal_way_to_undiscovered_vertex(vertex_from_id=cur_vertex, vertex_to_id=vertex_id_to_go)
                 if self.vertexes_path_turns_types:
                     return self.get_next_step_turn_type()
-            else:
-                to_turn_to = get_turn_types_by_qr(turns_qr_code=turns_qr_code)
+                else:
+                    to_turn_to = get_turn_types_by_qr(turns_qr_code=turns_qr_code)
             to_turn_to = to_turn_to[0]
             self.add_triple_vertex(v1_id=self.pre_last_vertex_id, v2_id=self.last_vertex_id, v3_id=cur_vertex,
                                    turn_type=to_turn_to)
