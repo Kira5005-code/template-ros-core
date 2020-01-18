@@ -83,7 +83,7 @@ class RandomAprilTagTurnsNode(object):
                     ids_vals = []
                     for i in tag_msgs.detections:
                         ids_vals.append(int(i.id))
-                        print("WHAT I FOUNDED :::::::::::::" + str(tag_msgs.detections[i].id))
+                        print("WHAT I FOUNDED :::::::::::::" + str(i.id))
 
                     if int(tag_msgs.detections[idx_min].id) >= 9 and int(tag_msgs.detections[idx_min].id) <= 11:
                         denis_turn_type = int(tag_msgs.detections[idx_min].id)
