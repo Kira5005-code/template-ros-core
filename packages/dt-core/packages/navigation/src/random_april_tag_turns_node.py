@@ -55,7 +55,7 @@ class RandomAprilTagTurnsNode(object):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
                     distance = math.sqrt(pos.x**2 + pos.y**2 + pos.z**2)
-                    if distance < dis_min and idx >= 9 and idx <= 11:
+                    if distance < dis_min:
                         dis_min = distance
                         idx_min = idx
 
@@ -77,15 +77,6 @@ class RandomAprilTagTurnsNode(object):
                     #now randomly choose a possible direction
                 if(len(availableTurns)>0):
                     randomIndex = numpy.random.randint(len(availableTurns))
-
-                    indexes_array = []  #:
-                    for i in range(len(tag_msgs.detections)):
-                        print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
-                        indexes_array.append(tag_msgs.detections[i])
-
-                    for i in range(5):
-                        print("IND ARR :: " + str(indexes_array))
-
                     chosenTurn = 1
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
