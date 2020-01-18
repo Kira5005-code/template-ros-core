@@ -65,7 +65,7 @@ class RandomAprilTagTurnsNode(object):
                         dis_min = distance
                         idx_min = idx
                     if tag_msgs.detections[idx].id in range(1, 5):
-                        sleep(2000)
+                        time.sleep(2000)
 
             if idx_min != -1:
                 #now randomly choose a possible direction
