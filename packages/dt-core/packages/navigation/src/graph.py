@@ -193,15 +193,12 @@ class GraphBuilder:
     def find_optimal_way_to_undiscovered_vertex(self, vertex_from_id, vertex_to_id):
         self.get_optimal_way_vertexes_ids(vertex_from_id=vertex_from_id, vertex_to_id=vertex_to_id)
         optimal_way_to_undiscovered_vertex_ids = self.vertexes_path_ids
-        have_anything = False
         for i in range(len(optimal_way_to_undiscovered_vertex_ids) - 2):
             have_anything = True
             self.vertexes_path_turns_types.append(
                 self.get_turn_type_by_path(v1_id=optimal_way_to_undiscovered_vertex_ids[i],
                                            v2_id=optimal_way_to_undiscovered_vertex_ids[i + 1],
                                            v3_id=optimal_way_to_undiscovered_vertex_ids[i + 2]))
-        if not have_anything:
-            print('No turns add to the path for following')
 
     def get_next_step_turn_type(self):
         turn_type_to_return = self.vertexes_path_turns_types[0]
@@ -232,8 +229,10 @@ class GraphBuilder:
                 vertex_id_to_go = self.find_first_undiscovered_vertex_id()
                 print('We\'re going to go to the ' + str(vertex_id_to_go) + ' vertex')
                 self.find_optimal_way_to_undiscovered_vertex(vertex_from_id=cur_vertex, vertex_to_id=vertex_id_to_go)
-                return self.get_next_step_turn_type()
-
+                if self.vertexes_path_turns_types:
+                    return self.get_next_step_turn_type()
+            else:
+                to_turn_to = get_turn_types_by_qr(turns_qr_code=turns_qr_code)
             to_turn_to = to_turn_to[0]
             self.add_triple_vertex(v1_id=self.pre_last_vertex_id, v2_id=self.last_vertex_id, v3_id=cur_vertex,
                                    turn_type=to_turn_to)
