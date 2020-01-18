@@ -100,11 +100,12 @@ class RandomAprilTagTurnsNode(object):
 
                     for i in range(5):
                         print("Calculated turn :::: " + str(chosenTurn))
-                        print("Vertex id::" + str(chosenTurn))
+                        print("Vertex id::" + str(min_id))
 
                     if chosenTurn == -1:
-                        exit()
-
+                        while(True):
+                            print("Graph built")
+                            sleep(10000)
 
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
