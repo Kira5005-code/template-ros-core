@@ -111,6 +111,7 @@ class RandomAprilTagTurnsNode(object):
                         print("Vertex id       :::: " + str(min_id))
 
                     if chosenTurn == -1:
+                        gb.visualize()
                         while(True):
                             print("Graph built")
                             time.sleep(10000)
