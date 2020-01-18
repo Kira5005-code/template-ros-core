@@ -96,12 +96,19 @@ class RandomAprilTagTurnsNode(object):
                     if gb is None:
                         gb = GraphBuilder()
 
-                    min_id = int(min(ids))
-                    chosenTurn = gb.get_next_turn(vertex_qr_code = min_id, turns_qr_code = denis_turn_type)
+
+                    if(min(ids) < 9):
+                        min_id = int(min(ids))
+                    else:
+                        for i in range(5):
+                            print("VERTEX ID NOT DETECTED! === ")
+                            time.sleep(5)
+
+                    chosenTurn = gb.get_next_turn(vertex_qr_code=min_id, turns_qr_code=denis_turn_type)
 
                     for i in range(5):
                         print("Calculated turn :::: " + str(chosenTurn))
-                        print("Vertex id::" + str(min_id))
+                        print("Vertex id       :::: " + str(min_id))
 
                     if chosenTurn == -1:
                         while(True):
