@@ -48,6 +48,7 @@ class RandomAprilTagTurnsNode(object):
             self.pub_turn_type.publish(self.turn_type)
             #rospy.loginfo("Turn type now: %i" %(self.turn_type))
     def cbTag(self, tag_msgs):
+        april_ids = []
         if self.fsm_mode == "INTERSECTION_CONTROL" or self.fsm_mode == "INTERSECTION_COORDINATION" or self.fsm_mode == "INTERSECTION_PLANNING":
             #loop through list of april tags
 
@@ -59,28 +60,16 @@ class RandomAprilTagTurnsNode(object):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
                     distance = math.sqrt(pos.x**2 + pos.y**2 + pos.z**2)
+                    april_ids.append(tag_msgs.detections[idx].id)
                     if distance < dis_min and tag_msgs.detections[idx].id >= 9 and tag_msgs.detections[idx].id <= 11:
                         dis_min = distance
                         idx_min = idx
+                    if tag_msgs.detections[idx].id in range(1, 5):
+                        sleep(2000)
 
             if idx_min != -1:
-                taginfo = (tag_msgs.infos)[idx_min]
-
-                availableTurns = []
-                #go through possible intersection types
-                signType = taginfo.traffic_sign_type
-                if(signType == taginfo.NO_RIGHT_TURN or signType == taginfo.LEFT_T_INTERSECT):
-                    availableTurns = [0,1] # these mystical numbers correspond to the array ordering in open_loop_intersection_control_node (very bad)
-                elif (signType == taginfo.NO_LEFT_TURN or signType == taginfo.RIGHT_T_INTERSECT):
-                    availableTurns = [1,2]
-                elif (signType== taginfo.FOUR_WAY):
-                    availableTurns = [0,1,2]
-                elif (signType == taginfo.T_INTERSECTION):
-                    availableTurns = [0,2]
-
-                    #now randomly choose a possible direction
-                if(len(availableTurns)>0):
-                    randomIndex = numpy.random.randint(len(availableTurns))
+                #now randomly choose a possible direction
+                if(len(april_ids)>0):
 
                     ids = []
                     for i in tag_msgs.detections:
@@ -90,21 +79,20 @@ class RandomAprilTagTurnsNode(object):
 
                     for i in range(5):
                         print("DTP :::: " + str(denis_turn_type))
-                        print("IDS::" + str(ids))
+                        print("IDS :::: " + str(ids))
 
                     global gb
                     if gb is None:
                         gb = GraphBuilder()
 
+                    while(min(ids) > 9):
+                        print("VERTEX ID NOT DETECTED! === ")
+                        time.sleep(50)
 
-                    if(min(ids) < 9):
-                        min_id = int(min(ids))
-                    else:
-                        for i in range(5):
-                            print("VERTEX ID NOT DETECTED! === ")
-                            time.sleep(5)
+                    min_id = int(min(ids))
 
-                    chosenTurn = gb.get_next_turn(vertex_qr_code=min_id, turns_qr_code=denis_turn_type)
+                    if(min_id > 0 and min_id < 9):
+                        chosenTurn = gb.get_next_turn(vertex_qr_code=min_id, turns_qr_code=denis_turn_type)
 
                     for i in range(5):
                         print("Calculated turn :::: " + str(chosenTurn))
@@ -114,7 +102,7 @@ class RandomAprilTagTurnsNode(object):
                         #gb.visualize()
                         while(True):
                             print("Graph built")
-                            time.sleep(10000)
+                            time.sleep(1000)
 
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
@@ -126,6 +114,9 @@ class RandomAprilTagTurnsNode(object):
 
                     #rospy.loginfo("possible turns %s." %(availableTurns))
                     #rospy.loginfo("Turn type now: %i" %(self.turn_type))
+                else:
+                    for i in range(5):
+                        print("NO TAGS FOUNDED WAT")
 
     def setupParameter(self,param_name,default_value):
         value = rospy.get_param(param_name,default_value)
