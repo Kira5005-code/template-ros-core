@@ -3,13 +3,9 @@
 
 import rospy
 import numpy
-import time
-from graph import GraphBuilder
 from duckietown_msgs.msg import FSMState, AprilTagsWithInfos, BoolStamped, TurnIDandType
 from std_msgs.msg import String, Int16 #Imports msg
 import math
-
-gb = None
 
 class RandomAprilTagTurnsNode(object):
     def __init__(self):
@@ -59,7 +55,7 @@ class RandomAprilTagTurnsNode(object):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
                     distance = math.sqrt(pos.x**2 + pos.y**2 + pos.z**2)
-                    if distance < dis_min and tag_msgs.detections[idx].id >= 9 and tag_msgs.detections[idx].id <= 11:
+                    if distance < dis_min:
                         dis_min = distance
                         idx_min = idx
 
@@ -81,41 +77,7 @@ class RandomAprilTagTurnsNode(object):
                     #now randomly choose a possible direction
                 if(len(availableTurns)>0):
                     randomIndex = numpy.random.randint(len(availableTurns))
-
-                    ids = []
-                    for i in tag_msgs.detections:
-                        ids.append(i.id)
-
-                    denis_turn_type = int(tag_msgs.detections[idx_min].id)
-
-                    for i in range(5):
-                        print("DTP :::: " + str(denis_turn_type))
-                        print("IDS::" + str(ids))
-
-                    global gb
-                    if gb is None:
-                        gb = GraphBuilder()
-
-
-                    if(min(ids) < 9):
-                        min_id = int(min(ids))
-                    else:
-                        while(True):
-                            print("VERTEX ID NOT DETECTED! === ")
-                            time.sleep(2)
-
-                    chosenTurn = gb.get_next_turn(vertex_qr_code=min_id, turns_qr_code=denis_turn_type)
-
-                    for i in range(5):
-                        print("Calculated turn :::: " + str(chosenTurn))
-                        print("Vertex id       :::: " + str(min_id))
-
-                    if chosenTurn == -1:
-                        #gb.visualize()
-                        while(True):
-                            print("Graph built")
-                            time.sleep(10)
-
+                    chosenTurn = availableTurns[randomIndex]
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
 
