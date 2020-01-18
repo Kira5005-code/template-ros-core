@@ -3,13 +3,12 @@
 
 import rospy
 import numpy
-import time
 from graph import GraphBuilder
 from duckietown_msgs.msg import FSMState, AprilTagsWithInfos, BoolStamped, TurnIDandType
 from std_msgs.msg import String, Int16 #Imports msg
 import math
 
-gb = None
+gb = GraphBuilder()
 
 class RandomAprilTagTurnsNode(object):
     def __init__(self):
@@ -48,7 +47,6 @@ class RandomAprilTagTurnsNode(object):
             self.pub_turn_type.publish(self.turn_type)
             #rospy.loginfo("Turn type now: %i" %(self.turn_type))
     def cbTag(self, tag_msgs):
-        april_ids = []
         if self.fsm_mode == "INTERSECTION_CONTROL" or self.fsm_mode == "INTERSECTION_COORDINATION" or self.fsm_mode == "INTERSECTION_PLANNING":
             #loop through list of april tags
 
@@ -60,49 +58,57 @@ class RandomAprilTagTurnsNode(object):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
                     distance = math.sqrt(pos.x**2 + pos.y**2 + pos.z**2)
-                    april_ids.append(tag_msgs.detections[idx].id)
                     if distance < dis_min and tag_msgs.detections[idx].id >= 9 and tag_msgs.detections[idx].id <= 11:
                         dis_min = distance
                         idx_min = idx
-                    if tag_msgs.detections[idx].id in range(1, 5):
-                        time.sleep(2000)
 
             if idx_min != -1:
-                #now randomly choose a possible direction
-                if(len(april_ids)>0):
+                taginfo = (tag_msgs.infos)[idx_min]
 
-                    ids = []
+                availableTurns = []
+                #go through possible intersection types
+                signType = taginfo.traffic_sign_type
+                if(signType == taginfo.NO_RIGHT_TURN or signType == taginfo.LEFT_T_INTERSECT):
+                    availableTurns = [0,1] # these mystical numbers correspond to the array ordering in open_loop_intersection_control_node (very bad)
+                elif (signType == taginfo.NO_LEFT_TURN or signType == taginfo.RIGHT_T_INTERSECT):
+                    availableTurns = [1,2]
+                elif (signType== taginfo.FOUR_WAY):
+                    availableTurns = [0,1,2]
+                elif (signType == taginfo.T_INTERSECTION):
+                    availableTurns = [0,2]
+
+                    #now randomly choose a possible direction
+                if(len(availableTurns)>0):
+
+                    ids_vals = []
                     for i in tag_msgs.detections:
-                        ids.append(i.id)
+                        ids_vals.append(tag_msgs.detections[i].id)
+                        print("WHAT I FOUNDED :::::::::::::" + str(tag_msgs.detections[i].id))
 
-                    denis_turn_type = int(tag_msgs.detections[idx_min].id)
+                    if tag_msgs.detections[idx_min].id >= 9 and tag_msgs.detections[idx_min].id <= 11:
+                        denis_turn_type = tag_msgs.detections[idx_min].id
+                        print("I DO SEE IDS")
+                    else:
+                        print("I DONT SEE IDS")
+                        return
 
+                    vertice_id = 0
+                    if min(ids_vals) in range(1,5):
+                        vertice_id = min(ids_vals)
+
+                    if vertice_id == 0:
+                        return
+
+                    chosenTurn = gb.get_next_turn(vertex_qr_code = vertice_id, turns_qr_code = denis_turn_type)
                     for i in range(5):
-                        print("DTP :::: " + str(denis_turn_type))
-                        print("IDS :::: " + str(ids))
-
-                    global gb
-                    if gb is None:
-                        gb = GraphBuilder()
-
-                    while(min(ids) > 9):
-                        print("VERTEX ID NOT DETECTED! === ")
-                        time.sleep(50)
-
-                    min_id = int(min(ids))
-
-                    if(min_id > 0 and min_id < 9):
-                        chosenTurn = gb.get_next_turn(vertex_qr_code=min_id, turns_qr_code=denis_turn_type)
-
-                    for i in range(5):
-                        print("Calculated turn :::: " + str(chosenTurn))
-                        print("Vertex id       :::: " + str(min_id))
+                        print("I GO::::" + str(chosenTurn))
+                        print("WHERE :: :::: " + str(vertice_id))
 
                     if chosenTurn == -1:
-                        #gb.visualize()
-                        while(True):
-                            print("Graph built")
-                            time.sleep(1000)
+                        while True:
+                            print("I DID THIS SHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET))))))))")
+                            time.sleep(10000)
+
 
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
@@ -114,9 +120,6 @@ class RandomAprilTagTurnsNode(object):
 
                     #rospy.loginfo("possible turns %s." %(availableTurns))
                     #rospy.loginfo("Turn type now: %i" %(self.turn_type))
-                else:
-                    for i in range(5):
-                        print("NO TAGS FOUNDED WAT")
 
     def setupParameter(self,param_name,default_value):
         value = rospy.get_param(param_name,default_value)
