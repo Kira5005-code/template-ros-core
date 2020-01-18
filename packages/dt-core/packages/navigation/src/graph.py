@@ -208,6 +208,10 @@ class GraphBuilder:
     def get_next_turn(self, vertex_qr_code, turns_qr_code):
         #  vertex_qr_code: int, turns_qr_code: int
         cur_vertex = get_vertex_id_by_qr(vertex_qr_code=vertex_qr_code)
+
+        if cur_vertex == self.last_vertex_id:
+            return 3
+
         if self.is_graph_built():
             self.write_down_triple_vertexes()
             return -1

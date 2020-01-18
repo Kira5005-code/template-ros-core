@@ -100,6 +100,10 @@ class RandomAprilTagTurnsNode(object):
                         return
 
                     chosenTurn = gb.get_next_turn(vertex_qr_code = vertice_id, turns_qr_code = denis_turn_type)
+
+                    if chosenTurn == 3:
+                        return
+
                     for i in range(5):
                         print("I GO::::" + str(chosenTurn))
                         print("WHERE :: :::: " + str(vertice_id))
