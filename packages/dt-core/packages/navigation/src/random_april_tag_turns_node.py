@@ -59,7 +59,7 @@ class RandomAprilTagTurnsNode(object):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
                     distance = math.sqrt(pos.x**2 + pos.y**2 + pos.z**2)
-                    if distance < dis_min:
+                    if distance < dis_min and tag_msgs.detections[idx].id >= 9 and tag_msgs.detections[idx].id <= 11:
                         dis_min = distance
                         idx_min = idx
 
