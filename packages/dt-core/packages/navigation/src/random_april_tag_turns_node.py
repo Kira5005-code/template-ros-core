@@ -86,12 +86,12 @@ class RandomAprilTagTurnsNode(object):
                     indexes_array = []  #:
                     for i in range(len(tag_msgs.detections)):
                         print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
-                        indexed_array.append(tag_msgs.detections[j].id)
+                        indexes_array.append(tag_msgs.detections[i])
 
                     for i in range(5):
                         print("TAGS ARRAY::::" + str(indexes_array))
 
-                    chosenTurn = 2 #denis(id1, id2) #TODO
+                    chosenTurn = 1 #denis(id1, id2) #TODO
 
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
