@@ -3,9 +3,12 @@
 
 import rospy
 import numpy
+from graph import GraphBuilder
 from duckietown_msgs.msg import FSMState, AprilTagsWithInfos, BoolStamped, TurnIDandType
 from std_msgs.msg import String, Int16 #Imports msg
 import math
+
+gb = None
 
 class RandomAprilTagTurnsNode(object):
     def __init__(self):
@@ -84,12 +87,25 @@ class RandomAprilTagTurnsNode(object):
 
                     denis_turn_type = tag_msgs.detections[idx_min].id
 
-                    for i in range(10):
-                        print("FOUNDED IDS :::: ")
-                        print(ids)
-                        print("chosend id::" + str(denis_turn_type) )
+                    for i in range(5):
+                        print("DTP :::: " + str(denis_turn_type))
+                        print("IDS::" + str(ids))
 
-                    chosenTurn = 1
+                    global gb
+                    if gb is None:
+                        gb = GraphBuilder()
+
+                    min_id = min(ids)
+                    chosenTurn = gb.get_next_turn(vertex_qr_code = min_id, turns_qr_code = denis_turn_type)
+
+                    for i in range(5):
+                        print("Calculated turn :::: " + str(chosenTurn))
+                        print("Vertex id::" + str(chosenTurn))
+
+                    if chosenTurn == -1:
+                        exit()
+
+
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
 
