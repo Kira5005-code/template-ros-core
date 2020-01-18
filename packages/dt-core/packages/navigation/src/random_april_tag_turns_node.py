@@ -3,6 +3,7 @@
 
 import rospy
 import numpy
+import time
 from graph import GraphBuilder
 from duckietown_msgs.msg import FSMState, AprilTagsWithInfos, BoolStamped, TurnIDandType
 from std_msgs.msg import String, Int16 #Imports msg
@@ -105,7 +106,7 @@ class RandomAprilTagTurnsNode(object):
                     if chosenTurn == -1:
                         while(True):
                             print("Graph built")
-                            sleep(10000)
+                            time.sleep(10000)
 
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
