@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from typing import List, Any
 
 import rospy
 import numpy
@@ -44,7 +43,6 @@ class RandomAprilTagTurnsNode(object):
             self.turn_type = -1
             self.pub_turn_type.publish(self.turn_type)
             #rospy.loginfo("Turn type now: %i" %(self.turn_type))
-
     def cbTag(self, tag_msgs):
         if self.fsm_mode == "INTERSECTION_CONTROL" or self.fsm_mode == "INTERSECTION_COORDINATION" or self.fsm_mode == "INTERSECTION_PLANNING":
             #loop through list of april tags
@@ -52,7 +50,6 @@ class RandomAprilTagTurnsNode(object):
             # filter out the nearest apriltag
             dis_min = 999
             idx_min = -1
-
             for idx, taginfo in enumerate(tag_msgs.infos):
                 if(taginfo.tag_type == taginfo.SIGN):
                     tag_det = (tag_msgs.detections)[idx]
@@ -80,19 +77,16 @@ class RandomAprilTagTurnsNode(object):
                     #now randomly choose a possible direction
                 if(len(availableTurns)>0):
                     randomIndex = numpy.random.randint(len(availableTurns))
-                    denis_turn_type = tag_msgs.detections[idx_min]
 
-                    # 0 - go to left; 1 - straight; 2 - right.
                     indexes_array = []  #:
                     for i in range(len(tag_msgs.detections)):
                         print("FROM RANDOM APRIL :: DENIS TURN ID :: " + str(denis_turn_type))
                         indexes_array.append(tag_msgs.detections[i])
 
                     for i in range(5):
-                        print("TAGS ARRAY::::" + str(indexes_array))
+                        print("IND ARR :: " + str(indexes_array))
 
-                    chosenTurn = 1 #denis(id1, id2) #TODO
-
+                    chosenTurn = 1
                     self.turn_type = chosenTurn
                     self.pub_turn_type.publish(self.turn_type)
 
