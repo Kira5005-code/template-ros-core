@@ -1,7 +1,6 @@
 from graphviz import Graph
 
 import copy
-import mail
 
 TURN_RIGHT, TURN_LEFT, STRAIGHT = 'TURN_RIGHT', 'TURN_LEFT', 'STRAIGHT'
 
