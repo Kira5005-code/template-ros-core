@@ -62,5 +62,3 @@ def send_mail(to, denis_msg):
         sys.exit( "mail failed; %s" % str(Exception) ) # give a error message
 
 
-
-send_mail("jeka.sudakov@mail.ru", "gfhf")

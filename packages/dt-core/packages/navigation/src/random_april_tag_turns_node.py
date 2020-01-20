@@ -93,8 +93,14 @@ class RandomAprilTagTurnsNode(object):
                         denis_turn_type = int(tag_msgs.detections[idx_min].id)
                         print("I DO SEE TURN IDS")
                     else:
-                        print("I DONT TURN SEE IDS")
-                        return
+                        if len(ids_vals) > 0:
+                            if max(ids_vals) > 8:
+                                denis_turn_type = int(tag_msgs.detections[max(ids_vals)].id)
+                            else:
+                                return
+                        else:
+                            return
+
 
                     vertice_id = 0
                     if min(ids_vals) in range(1,5):
