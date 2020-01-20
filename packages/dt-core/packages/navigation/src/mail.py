@@ -11,40 +11,42 @@ from email.mime.image import MIMEImage
 from email.mime.base import MIMEBase
 from email import Encoders
 
-def send_mail(to,text):
+def send_mail(to, denis_msg):
     SMTPserver = 'smtp.mail.ru'
-    sender = 'your email'
+    sender = 'jeka.sudakov@mail.ru'
     destination = [to]
 
-    USERNAME = "your email"
-    PASSWORD = "your pass"
+    USERNAME = "jeka.sudakov@mail.ru"
+    PASSWORD = "777petuxov"
 
     text_subtype = 'txt'
-    with open("graph.txt", "rb") as f:
-        content = f.read()
+    #with open("graph.txt", "rb") as f:
+     #   content = f.read()
 
 
     try:
-        part1 = MIMEText(content, text_subtype)
+      #  part1 = MIMEText(content, text_subtype)
+        part2 = MIMEText(denis_msg, 'txt')
         msg = MIMEMultipart('alternative')
-        msg.attach(part1)
+       # msg.attach(part1)
+        msg.attach(part2)
 
-        filepath = 'meme.jpg'
-        with open(filepath, 'rb') as f:
-            img = MIMEImage(f.read())
+       # filepath = 'meme.jpg'
+       # with open(filepath, 'rb') as f:
+        #    img = MIMEImage(f.read())
 
-        img.add_header('Content-Disposition',
-                       'attachment',
-                       filename=os.path.basename(filepath))
-        msg.attach(img)
+       # img.add_header('Content-Disposition',
+         #              'attachment',
+          #             filename=os.path.basename(filepath))
+       # msg.attach(img)
 
-        part = MIMEBase('application', "octet-stream")
-        part.set_payload(open("book.pdf", "rb").read())
-        Encoders.encode_base64(part)
+        #part = MIMEBase('application', "octet-stream")
+        #part.set_payload(open("book.pdf", "rb").read())
+        #Encoders.encode_base64(part)
 
-        part.add_header('Content-Disposition', 'attachment; filename="text.txt"')
+        #part.add_header('Content-Disposition', 'attachment; filename="text.txt"')
 
-        msg.attach(part)
+        #msg.attach(part)
 
         msg['Subject']= "hello"
         msg['From']   = sender # some SMTP servers will do this automatically, not all
@@ -61,4 +63,4 @@ def send_mail(to,text):
 
 
 
-send_mail("for who email", "")
+send_mail("jeka.sudakov@mail.ru", "gfhf")

@@ -90,7 +90,7 @@ class GraphBuilder:
         self.last_vertex_id = None
         self.last_turn_type = None
         self.pre_last_vertex_id = None
-        self.graph = Graph('G', filename='graph.gv')
+        self.graph = Graph('G', filename='/data/graph.gv')
         self.triple_vertexes = list()
         self.dif_vertexes_ids = list()
         self.from_first_vertex_to_another_connections = dict()
@@ -153,7 +153,7 @@ class GraphBuilder:
         return bool(summary >= len(self.dif_vertexes_ids) * 3)
 
     def write_down_triple_vertexes(self):
-        f = open('TripleVertexes.txt', 'w')
+        f = open('/data/TripleVertexes.txt', 'w')
         for triple_vertex in self.triple_vertexes:
             f.write(triple_vertex.info_to_string())
             f.write("\n")
@@ -256,4 +256,4 @@ class GraphBuilder:
         self.graph.save()
         self.graph.view()
         self.graph.clear()
-        self.graph = Graph('G', filename='graph.gv')
+        self.graph = Graph('G', filename='/data/graph.gv')
