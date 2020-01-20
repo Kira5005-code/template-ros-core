@@ -46,6 +46,10 @@ class TripleVertex:
         self.v3_id = v3_id
         self.turn_type_between = turn_type_between
 
+    def info_to_string(self):
+        return str(self.v1_id) + ' ' + str(self.v2_id) + ' ' + str(self.v3_id) + ' ' + str(
+            get_turn_code_by_turn_type(self.turn_type_between))
+
     def to_string(self):
         return 'v1: ' + str(self.v1_id) + '  v2: ' + str(self.v2_id) + '  v3: ' + str(
             self.v3_id) + '  turn type: ' + self.turn_type_between
@@ -93,6 +97,7 @@ class GraphBuilder:
         self.vertexes_path_ids = list()
         self.vertex_path_to_id = list()
         self.vertexes_path_turns_types = list()
+        self.max_whole_edges_amount = 0
 
     def update_state(self, vertex_id, last_turn_type):
         # vertex_id: int
@@ -104,18 +109,19 @@ class GraphBuilder:
         return 'Last vertex id: ' + str(self.last_vertex_id) + '  pre last vertex id: ' + str(
             self.pre_last_vertex_id) + '  last turned type: ' + str(self.last_turn_type)
 
-    def get_optimal_turns(self, prev_last_ver_id, last_ver_id, turns_qr_code):
-        # prev_last_ver_id: int, last_ver_id: int, turns_qr_code: int
+    def get_optimal_turns(self, last_ver_id, cur_ver_id, turns_qr_code):
+        # last_ver_id: int, cur_ver_id: int, turns_qr_code: int
         possible_turns = get_turn_types_by_qr(turns_qr_code=turns_qr_code)
         old_data = self.triple_vertexes
+        print ('old vertexes: ' + str(old_data))
         for triple_vertex in old_data:
             try:
-                if triple_vertex.v1_id == prev_last_ver_id and triple_vertex.v2_id == last_ver_id:
+                if triple_vertex.v1_id == last_ver_id and triple_vertex.v2_id == cur_ver_id:
                     possible_turns.remove(triple_vertex.turn_type_between)
             except ValueError:
                 print('Cannot remove. Has: ', possible_turns, '  trying remove: ', triple_vertex.turn_type_between)
             try:
-                if triple_vertex.v3_id == prev_last_ver_id and triple_vertex.v2_id == last_ver_id:
+                if triple_vertex.v3_id == last_ver_id and triple_vertex.v2_id == cur_ver_id:
                     possible_turns.remove(get_reversed_turn_type(triple_vertex.turn_type_between))
             except ValueError:
                 print('Cannot remove. Has: ', possible_turns, '  trying remove: ',
@@ -138,10 +144,6 @@ class GraphBuilder:
             self.from_first_vertex_to_another_connections[v3].append(v2)
         if v1 not in self.from_first_vertex_to_another_connections[v2]:
             self.from_first_vertex_to_another_connections[v2].append(v1)
-        if v1 not in self.from_first_vertex_to_another_connections[v3]:
-            self.from_first_vertex_to_another_connections[v3].append(v1)
-        if v3 not in self.from_first_vertex_to_another_connections[v1]:
-            self.from_first_vertex_to_another_connections[v1].append(v3)
         if v3 not in self.from_first_vertex_to_another_connections[v2]:
             self.from_first_vertex_to_another_connections[v2].append(v3)
         summary = 0
@@ -153,7 +155,7 @@ class GraphBuilder:
     def write_down_triple_vertexes(self):
         with open('TripleVertexes.txt', 'w') as f:
             for triple_vertex in self.triple_vertexes:
-                f.write(triple_vertex.to_string())
+                f.write(triple_vertex.info_to_string())
                 f.write("\n")
 
     def make_wave(self, vertexes_path_ids_temp):
@@ -194,7 +196,6 @@ class GraphBuilder:
         self.get_optimal_way_vertexes_ids(vertex_from_id=vertex_from_id, vertex_to_id=vertex_to_id)
         optimal_way_to_undiscovered_vertex_ids = self.vertexes_path_ids
         for i in range(len(optimal_way_to_undiscovered_vertex_ids) - 2):
-            have_anything = True
             self.vertexes_path_turns_types.append(
                 self.get_turn_type_by_path(v1_id=optimal_way_to_undiscovered_vertex_ids[i],
                                            v2_id=optimal_way_to_undiscovered_vertex_ids[i + 1],
@@ -209,26 +210,31 @@ class GraphBuilder:
         #  vertex_qr_code: int, turns_qr_code: int
         cur_vertex = get_vertex_id_by_qr(vertex_qr_code=vertex_qr_code)
 
+        if cur_vertex not in self.dif_vertexes_ids:
+            self.dif_vertexes_ids.append(cur_vertex)
+            self.from_first_vertex_to_another_connections[cur_vertex] = list()
+
         if cur_vertex == self.last_vertex_id:
             return 3
 
+        if self.pre_last_vertex_id is not None:
+            self.add_triple_vertex(v1_id=self.pre_last_vertex_id, v2_id=self.last_vertex_id, v3_id=cur_vertex,
+                                   turn_type=self.last_turn_type)
+
         if self.is_graph_built():
             self.write_down_triple_vertexes()
+            print(self.triple_vertexes)
             return -1
 
         if self.vertexes_path_turns_types:
             return self.get_next_step_turn_type()
 
-        if cur_vertex not in self.dif_vertexes_ids:
-            self.dif_vertexes_ids.append(cur_vertex)
-            self.from_first_vertex_to_another_connections[cur_vertex] = list()
-
         if self.last_vertex_id is None or self.pre_last_vertex_id is None:
             to_turn_to = get_turn_types_by_qr(turns_qr_code=turns_qr_code)[0]
             self.update_state(vertex_id=cur_vertex, last_turn_type=to_turn_to)
         else:
-            to_turn_to = self.get_optimal_turns(prev_last_ver_id=self.pre_last_vertex_id,
-                                                last_ver_id=self.last_vertex_id, turns_qr_code=turns_qr_code)
+            to_turn_to = self.get_optimal_turns(last_ver_id=self.last_vertex_id,
+                                                cur_ver_id=cur_vertex, turns_qr_code=turns_qr_code)
             if not to_turn_to:
                 vertex_id_to_go = self.find_first_undiscovered_vertex_id()
                 print('We\'re going to go to the ' + str(vertex_id_to_go) + ' vertex')
@@ -238,8 +244,6 @@ class GraphBuilder:
                 else:
                     to_turn_to = get_turn_types_by_qr(turns_qr_code=turns_qr_code)
             to_turn_to = to_turn_to[0]
-            self.add_triple_vertex(v1_id=self.pre_last_vertex_id, v2_id=self.last_vertex_id, v3_id=cur_vertex,
-                                   turn_type=to_turn_to)
             self.update_state(vertex_id=cur_vertex, last_turn_type=to_turn_to)
         return get_turn_code_by_turn_type(to_turn_to)
 
