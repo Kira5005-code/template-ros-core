@@ -59,9 +59,12 @@ class RandomAprilTagTurnsNode(object):
                     tag_det = (tag_msgs.detections)[idx]
                     pos = tag_det.pose.pose.position
                     distance = math.sqrt(pos.x**2 + pos.y**2 + pos.z**2)
-                    if distance < dis_min and tag_msgs.detections[idx].id >= 9 and tag_msgs.detections[idx].id <= 11:
+                    if distance < dis_min:
                         dis_min = distance
                         idx_min = idx
+
+            if idx_min == -1:
+                return
 
             if idx_min != -1:
                 taginfo = (tag_msgs.infos)[idx_min]
@@ -88,9 +91,9 @@ class RandomAprilTagTurnsNode(object):
 
                     if int(tag_msgs.detections[idx_min].id) >= 9 and int(tag_msgs.detections[idx_min].id) <= 11:
                         denis_turn_type = int(tag_msgs.detections[idx_min].id)
-                        print("I DO SEE IDS")
+                        print("I DO SEE TURN IDS")
                     else:
-                        print("I DONT SEE IDS")
+                        print("I DONT TURN SEE IDS")
                         return
 
                     vertice_id = 0
