@@ -1,6 +1,7 @@
 from graphviz import Graph
 
 import copy
+import mail
 
 TURN_RIGHT, TURN_LEFT, STRAIGHT = 'TURN_RIGHT', 'TURN_LEFT', 'STRAIGHT'
 
@@ -153,10 +154,11 @@ class GraphBuilder:
         return bool(summary >= len(self.dif_vertexes_ids) * 3)
 
     def write_down_triple_vertexes(self):
-        with open('TripleVertexes.txt', 'w') as f:
-            for triple_vertex in self.triple_vertexes:
-                f.write(triple_vertex.info_to_string())
-                f.write("\n")
+        f = open('TripleVertexes.txt', 'w')
+        for triple_vertex in self.triple_vertexes:
+            f.write(triple_vertex.info_to_string())
+            f.write("\n")
+        f.close()
 
     def make_wave(self, vertexes_path_ids_temp):
         last_vertex_checked = vertexes_path_ids_temp[-1]
@@ -223,6 +225,7 @@ class GraphBuilder:
 
         if self.is_graph_built():
             self.write_down_triple_vertexes()
+            self.visualize()
             print(self.triple_vertexes)
             return -1
 

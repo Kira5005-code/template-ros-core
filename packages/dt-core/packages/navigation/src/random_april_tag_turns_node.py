@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import rospy
+import sys
 import numpy
 from graph import GraphBuilder
 from duckietown_msgs.msg import FSMState, AprilTagsWithInfos, BoolStamped, TurnIDandType
@@ -103,15 +104,15 @@ class RandomAprilTagTurnsNode(object):
 
                     if chosenTurn == 3:
                         return
-
+                    turns = ["LEFT", "STRAIGHT", "RIGHT"]
                     for i in range(5):
-                        print("I GO::::" + str(chosenTurn))
-                        print("WHERE :: :::: " + str(vertice_id))
+                        print("The next turn i will do::::" + turns[chosenTurn])
+                        print("Now i am at vertice  ::::  " + str(vertice_id))
 
                     if chosenTurn == -1:
-                        while True:
-                            print("I DID THIS SHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET))))))))")
-                            time.sleep(10000)
+                        for i in range(100):
+                            print("I DID iTTTTTTTTTT))))))))")
+                        sys.exit(0)
 
 
                     self.turn_type = chosenTurn
